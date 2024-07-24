@@ -1,29 +1,32 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.25;
+pragma solidity ^0.8.0;
 
 import "../src/Token.sol";
 import {HelperConfig} from "./HelperConfig.s.sol";
 import {Script} from "forge-std/Script.sol";
+import "../test/mock/VRFCoordinatorV2_5Mock.sol";
 
 contract DeployToken is Script {
     function run() external returns (Game) {
         HelperConfig helperConfig = new HelperConfig();
         (
             uint256 subscriptionId,
-            bytes32 gasLane,
+            bytes32 keyHash,
             uint32 callbackGasLimit,
-            address vrfCoordinatorV2,
+            address vrfCoordinator,
             uint256 deployerKey
         ) = helperConfig.activeNetworkConfig();
 
-        vm.startBroadcast(uint256(deployerKey));
+        vm.startBroadcast(deployerKey);
         Game game = new Game(
             subscriptionId,
-            gasLane,
+            keyHash,
             callbackGasLimit,
-            vrfCoordinatorV2
+            vrfCoordinator
         );
         vm.stopBroadcast();
+
+        VRFCoordinatorV2_5Mock(vrfCoordinator).addConsumer(subscriptionId,address(game));
 
         return game;
     }

@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.25;
+pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Burnable.sol";
@@ -11,7 +11,7 @@ contract Game is ERC20, ERC20Burnable, VRFConsumerBaseV2Plus {
     /* State variables */
     //Chainlink VRF Variables
     uint256 private immutable i_subscriptionId;
-    bytes32 private immutable i_gasLane;
+    bytes32 private immutable i_keyHash;
     uint32 private immutable i_callbackGasLimit;
     uint16 private constant REQUEST_CONFIRMATIONS = 3;
     uint32 private constant NUM_WORDS = 30;
@@ -26,10 +26,10 @@ contract Game is ERC20, ERC20Burnable, VRFConsumerBaseV2Plus {
     /* Constructor */
     constructor(
         uint256 subscriptionId,
-        bytes32 gasLane,
+        bytes32 keyHash,
         uint32 callbackGasLimit,
         address vrfCoordinatorV2) ERC20("MacauStorm", "MS") VRFConsumerBaseV2Plus(vrfCoordinatorV2) {
-            i_gasLane = gasLane;
+            i_keyHash = keyHash;
             i_callbackGasLimit = callbackGasLimit;
             i_subscriptionId = subscriptionId;
         }
@@ -54,7 +54,7 @@ contract Game is ERC20, ERC20Burnable, VRFConsumerBaseV2Plus {
     function startGame(uint256 amount, uint256[] calldata words) public {
         uint256 requestId = s_vrfCoordinator.requestRandomWords(
             VRFV2PlusClient.RandomWordsRequest({
-                keyHash: i_gasLane,
+                keyHash: i_keyHash,
                 subId: i_subscriptionId,
                 requestConfirmations: REQUEST_CONFIRMATIONS,
                 callbackGasLimit: i_callbackGasLimit,
