@@ -7,7 +7,7 @@ import {Script} from "forge-std/Script.sol";
 import "../test/mock/VRFCoordinatorV2_5Mock.sol";
 
 contract DeployToken is Script {
-    function run() external returns (Game) {
+    function run() external returns (Token) {
         HelperConfig helperConfig = new HelperConfig();
         (
             uint256 subscriptionId,
@@ -18,7 +18,7 @@ contract DeployToken is Script {
         ) = helperConfig.activeNetworkConfig();
 
         vm.startBroadcast(deployerKey);
-        Game game = new Game(
+        Token game = new Token(
             subscriptionId,
             keyHash,
             callbackGasLimit,

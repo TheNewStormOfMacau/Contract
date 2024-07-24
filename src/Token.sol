@@ -7,7 +7,7 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 import {VRFConsumerBaseV2Plus} from "@chainlink/contracts/src/v0.8/vrf/dev/VRFConsumerBaseV2Plus.sol";
 import {VRFV2PlusClient} from "@chainlink/contracts/src/v0.8/vrf/dev/libraries/VRFV2PlusClient.sol";
 
-contract Game is ERC20, ERC20Burnable, VRFConsumerBaseV2Plus {
+contract Token is ERC20, ERC20Burnable, VRFConsumerBaseV2Plus {
     /* State variables */
     //Chainlink VRF Variables
     uint256 private immutable i_subscriptionId;
